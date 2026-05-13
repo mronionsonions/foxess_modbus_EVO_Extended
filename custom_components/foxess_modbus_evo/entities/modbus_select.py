@@ -29,6 +29,8 @@ class ModbusSelectDescription(SelectEntityDescription, EntityFactory):  # type: 
 
     address: list[ModbusAddressSpec]
     options_map: dict[int, str]
+    # Additional Write map for EVO
+    write_options_map: dict[int, str] | None = None 
     validate: list[BaseValidator] = field(default_factory=list)
 
     @property
@@ -96,9 +98,9 @@ class ModbusSelect(ModbusEntityMixin, SelectEntity):
 
     async def async_select_option(self, option: str) -> None:
         entity_description = cast(ModbusSelectDescription, self.entity_description)
-        value = next(
-            (k for k, v in entity_description.options_map.items() if v == option),
-            None,
+        write_map = entity_description.write_options_map or entity_description.options_map  
+value = next(  
+    (k for k, v in write_map.items() if v == option),
         )
         if value is None:
             _LOGGER.warning(
