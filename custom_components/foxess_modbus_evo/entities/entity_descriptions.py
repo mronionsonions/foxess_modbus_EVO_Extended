@@ -2550,7 +2550,7 @@ def _configuration_entities() -> Iterable[EntityFactory]:
     yield ModbusWorkModeSelectDescription(
         key="work_mode",
         address=[
-            ModbusAddressSpec(holding=49203, models=Inv.H3_PRO_SET | Inv.H3_SMART | Inv.EVO_10_H),
+            ModbusAddressSpec(holding=49203, models=Inv.H3_PRO_SET | Inv.H3_SMART),
         ],
         name="Work Mode",
         options_map={
@@ -2562,7 +2562,28 @@ def _configuration_entities() -> Iterable[EntityFactory]:
             7: "Force Discharge",
         },
     )
+yield ModbusWorkModeSelectDescription(  
+    key="work_mode",  
+    address=[  
+        ModbusAddressSpec(holding=49203, models=Inv.EVO_10_H),  
+    ],  
+    name="Work Mode",  
+    options_map={          # read map — what the inverter returns  
+        1: "Self Use",  
+        2: "Feed-in First",  
+        3: "Back-up",  
+        4: "Peak Shaving",  
+    },  
+    write_options_map={    # write map — what the inverter accepts  
+        0: "Self Use",  
+        1: "Feed-in First",  
+        2: "Back-up",  
+        3: "Peak Shaving",  
+    },  
+)
+    
 
+    
     yield ModbusWorkModeSelectDescription(
         key="work_mode",
         address=[
